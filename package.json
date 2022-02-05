@@ -1,0 +1,38 @@
+{
+  "name": "vh-sticky-table-header",
+  "version": "0.1.0",
+  "description": "Vertical and horizontal sticky table header. Framework agnostic. ",
+  "type": "commonjs",
+  "main": "build/commonjs/index.js",
+  "module": "build/esm/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --outDir build/esm --declaration --declarationDir build && tsc --outDir build/commonjs --module commonjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/archfz/vh-sticky-table-header.git"
+  },
+  "keywords": [
+    "vertical",
+    "horizontal",
+    "sticky",
+    "table",
+    "sticky",
+    "header",
+    "sticky",
+    "table",
+    "header",
+    "scroll"
+  ],
+  "author": "Fodor Zoltan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/archfz/vh-sticky-table-header/issues"
+  },
+  "homepage": "https://github.com/archfz/vh-sticky-table-header#readme",
+  "dependencies": {
+    "typescript": "^4.5.5"
+  }
+}

@@ -8,9 +8,9 @@ horizontal scroll and stickiness is needed as well.
 ## Features
 
 - Support vertical and horizontal scroll stickiness at the same time.
-- Support different top displacement per viewport width.
+- [Support different top displacement per viewport width](#top).
 - No flickering. Element coordinates are not updated on scroll events.
-- Smaller than 5kb compressed.
+- [Smaller than 4kb compressed](https://bundlephobia.com/package/vh-sticky-table-header).
 - No dependencies. Can be used in any framework.
 
 ## Installation and usage

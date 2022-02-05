@@ -55,9 +55,9 @@ const TableWithStickyHeader: FC = ({ children }) => {
 };
 ```
 
-Requirements:
+Requirements (these can be seen in the demo as well):
 
-1. The table containers `div` elements should have the following css for vertical scrolling to work:
+1. The table container `div` elements should have the following css for vertical scrolling to work:
     ```css
     .table_container {
         width: 100%;
@@ -66,8 +66,8 @@ Requirements:
     }
     ```
 2. The JS logic to determine when to show the sticky header uses `window.document`. The body needs to 
-   at y = 0 position when the scroll y = 0. Make sure that the body is not displaced using child elements 
-   with `margin` (ex: in case of sticky site header). Use `padding` instead.
+   at be at y = 0 position when the scroll is at y = 0. Make sure that the body is not displaced using 
+   child elements with `margin` (ex: in case of sticky site header). Use `padding` instead.
 
 ## Options
 

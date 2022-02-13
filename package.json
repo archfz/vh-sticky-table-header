@@ -1,6 +1,6 @@
 {
   "name": "vh-sticky-table-header",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Vertical and horizontal sticky table header. Framework agnostic. ",
   "type": "commonjs",
   "main": "build/commonjs/index.js",

@@ -17,7 +17,7 @@ export default class StickyTableHeader {
   constructor(
     tableContainer: HTMLTableElement,
     cloneContainer: HTMLTableElement,
-    top: { max: number; [key: number]: number },
+    top: { max: number | string; [key: number]: number | string },
   ) {
     const header = tableContainer.querySelector<HTMLTableRowElement>('thead');
     this.tableContainer = tableContainer;

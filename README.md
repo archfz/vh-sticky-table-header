@@ -99,6 +99,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.1.1
+
+- Typing fix.
+
 #### 1.1.0
 
 - Add support for `rem` displacement.

@@ -12,7 +12,7 @@ export default class StickyTableHeader {
   private cloneContainerParent: HTMLDivElement;
   private cloneHeader: any = null;
   private header: HTMLTableRowElement;
-  private top: { max: number; [key: number]: number };
+  private top: { max: number | string; [key: number]: number | string };
 
   constructor(
     tableContainer: HTMLTableElement,
@@ -150,6 +150,20 @@ export default class StickyTableHeader {
     this.cloneContainerParent.scrollLeft = this.tableContainerParent.scrollLeft;
   }
 
+  private sizeToPx(size: number | string): number {
+    if (typeof size === 'number') {
+      return size;
+    } else if (size.match(/rem$/)) {
+      const rem = +size.replace(/rem$/, '');
+      return Number.parseFloat(
+        window.getComputedStyle(document.getElementsByTagName('html')[0]).fontSize
+      ) * rem;
+    } else {
+      console.error('Unsupported size format for sticky table header displacement.');
+      return 0;
+    }
+  }
+
   private getTop(): number {
     const windowWidth = document.body.getBoundingClientRect().width;
     const sizes = Object.entries(this.top)
@@ -158,10 +172,10 @@ export default class StickyTableHeader {
 
     for (let i = 0, size; (size = sizes[i++]); ) {
       if (windowWidth < Number.parseInt(size[0], 10)) {
-        return size[1];
+        return this.sizeToPx(size[1]);
       }
     }
 
-    return this.top.max;
+    return this.sizeToPx(this.top.max);
   }
 }

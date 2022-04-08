@@ -1,3 +1,3 @@
-import StickyTableHeader from "./StickyTableHeader";
+import StickyTableHeader from "./StickyTableHeader.js";
 
 export { StickyTableHeader }

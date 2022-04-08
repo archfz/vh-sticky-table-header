@@ -99,6 +99,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.1.2
+
+- Fix ESM module, for webpack compatibility.
+
 #### 1.1.1
 
 - Typing fix.

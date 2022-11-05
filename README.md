@@ -99,6 +99,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.2.0
+
+- Prevent sticky header overflowing table vertically when scrolling past table.
+
 #### 1.1.2
 
 - Fix ESM module, for webpack compatibility.

@@ -78,15 +78,39 @@ export default class StickyTableHeader {
   private setupSticky(): void {
     const updateSticky = () => {
       window.requestAnimationFrame(() => {
-        const tableTop = this.tableContainer.getBoundingClientRect().y - document.body.getBoundingClientRect().y;
-        const diff = window.scrollY - tableTop;
+        const lastElement = this.tableContainer.querySelector('tbody tr:last-child');
+        const bodyRectY = document.body.getBoundingClientRect().y;
+        const tableRect = this.tableContainer.getBoundingClientRect();
+        const tableTop = tableRect.y - bodyRectY;
+        let tableBottom;
 
+        if (lastElement) {
+          tableBottom = lastElement.getBoundingClientRect().y
+            - bodyRectY
+            - this.header.getBoundingClientRect().height;
+        } else {
+          tableBottom = tableRect.y + tableRect.height
+            - bodyRectY
+            - this.header.getBoundingClientRect().height;
+        }
+
+        const diffTop = window.scrollY - tableTop;
+        const diffBottom = window.scrollY - tableBottom;
         const topPx = this.getTop();
-        if (diff > -topPx && null === this.cloneHeader) {
+
+        if (diffTop > -topPx && null === this.cloneHeader) {
           this.cloneHeader = this.createClone();
-        } else if (diff <= -topPx && null !== this.cloneHeader) {
-          this.cloneContainer.removeChild(this.cloneHeader);
-          this.cloneHeader = null;
+        } else if (null !== this.cloneHeader) {
+          if (diffTop <= -topPx) {
+            this.cloneContainer.removeChild(this.cloneHeader);
+            this.cloneHeader = null;
+          } else if (diffBottom < -topPx) {
+            this.cloneContainerParent.style.position = 'fixed';
+            this.cloneContainerParent.style.top = `${topPx}px`;
+          } else {
+            this.cloneContainerParent.style.position = 'absolute';
+            this.cloneContainerParent.style.top = `${tableBottom - tableTop}px`;
+          }
         }
       });
     };

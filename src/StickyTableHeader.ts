@@ -4,6 +4,7 @@
 export default class StickyTableHeader {
   private sizeListener?: EventListener;
   private scrollListener?: EventListener;
+  private currentFrameRequest?: number;
   private containerScrollListener?: EventListener;
   private clickListener?: (event: MouseEvent) => any;
   private tableContainerParent: HTMLDivElement;
@@ -38,6 +39,9 @@ export default class StickyTableHeader {
   public destroy(): void {
     if (this.scrollListener) {
       window.removeEventListener('scroll', this.scrollListener);
+    }
+    if (this.currentFrameRequest) {
+      window.cancelAnimationFrame(this.currentFrameRequest);
     }
     if (this.sizeListener) {
       window.removeEventListener('resize', this.sizeListener);
@@ -77,7 +81,7 @@ export default class StickyTableHeader {
 
   private setupSticky(): void {
     const updateSticky = () => {
-      window.requestAnimationFrame(() => {
+      this.currentFrameRequest = window.requestAnimationFrame(() => {
         const lastElement = this.tableContainer.querySelector('tbody tr:last-child');
         const bodyRectY = document.body.getBoundingClientRect().y;
         const tableRect = this.tableContainer.getBoundingClientRect();

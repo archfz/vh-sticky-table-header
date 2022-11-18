@@ -99,6 +99,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.2.1
+
+- Fix issue where quick render and destroy would render the sticky header twice.
+
 #### 1.2.0
 
 - Prevent sticky header overflowing table vertically when scrolling past table.

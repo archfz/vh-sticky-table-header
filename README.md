@@ -99,6 +99,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.3.0
+
+- Hide the clone container (display:none) when not sticky. [issue](https://github.com/archfz/vh-sticky-table-header/issues/1)
+
 #### 1.2.1
 
 - Fix issue where quick render and destroy would render the sticky header twice.

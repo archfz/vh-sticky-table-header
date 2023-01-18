@@ -103,16 +103,21 @@ export default class StickyTableHeader {
         const topPx = this.getTop();
 
         if (diffTop > -topPx && null === this.cloneHeader) {
+          this.cloneContainerParent.style.display = 'none';
           this.cloneHeader = this.createClone();
         } else if (null !== this.cloneHeader) {
           if (diffTop <= -topPx) {
+            this.cloneContainerParent.style.display = 'none';
             this.cloneContainer.removeChild(this.cloneHeader);
             this.cloneHeader = null;
           } else if (diffBottom < -topPx) {
+            this.cloneContainerParent.style.display = 'block';
             this.cloneContainerParent.style.position = 'fixed';
             this.cloneContainerParent.style.top = `${topPx}px`;
           } else {
+            this.cloneContainerParent.style.display = 'block';
             this.cloneContainerParent.style.position = 'absolute';
+            console.log(tableTop, tableBottom);
             this.cloneContainerParent.style.top = `${tableBottom - tableTop}px`;
           }
         }

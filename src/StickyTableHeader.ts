@@ -117,7 +117,6 @@ export default class StickyTableHeader {
           } else {
             this.cloneContainerParent.style.display = 'block';
             this.cloneContainerParent.style.position = 'absolute';
-            console.log(tableTop, tableBottom);
             this.cloneContainerParent.style.top = `${tableBottom - tableTop}px`;
           }
         }

@@ -99,6 +99,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.3.1
+
+- Remove leftover `console.log`.
+
 #### 1.3.0
 
 - Hide the clone container (display:none) when not sticky. [issue](https://github.com/archfz/vh-sticky-table-header/issues/1)

@@ -85,6 +85,7 @@ export default class StickyTableHeader {
         const lastElement = this.tableContainer.querySelector('tbody tr:last-child');
         const bodyRectY = document.body.getBoundingClientRect().y;
         const tableRect = this.tableContainer.getBoundingClientRect();
+        const tableOffsetTop = this.tableContainer.offsetTop;
         const tableTop = tableRect.y - bodyRectY;
         let tableBottom;
 
@@ -105,7 +106,9 @@ export default class StickyTableHeader {
         if (diffTop > -topPx && null === this.cloneHeader) {
           this.cloneContainerParent.style.display = 'none';
           this.cloneHeader = this.createClone();
-        } else if (null !== this.cloneHeader) {
+        }
+
+        if (null !== this.cloneHeader) {
           if (diffTop <= -topPx) {
             this.cloneContainerParent.style.display = 'none';
             this.cloneContainer.removeChild(this.cloneHeader);
@@ -114,10 +117,11 @@ export default class StickyTableHeader {
             this.cloneContainerParent.style.display = 'block';
             this.cloneContainerParent.style.position = 'fixed';
             this.cloneContainerParent.style.top = `${topPx}px`;
+            this.setHorizontalScrollOnClone();
           } else {
             this.cloneContainerParent.style.display = 'block';
             this.cloneContainerParent.style.position = 'absolute';
-            this.cloneContainerParent.style.top = `${tableBottom - tableTop}px`;
+            this.cloneContainerParent.style.top = `${tableBottom - tableTop + tableOffsetTop}px`;
           }
         }
       });

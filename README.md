@@ -99,6 +99,13 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.4.0
+
+- Improve docking when scrolling past container. Now `offsetTop` is added to the absolute position
+  of the clone table container.
+- Fix issue where horizontal scrolling would not update on the clone containers horizontal scroll
+  when the scrolling was done in docking state. [issue](https://github.com/archfz/vh-sticky-table-header/issues/3)
+
 #### 1.3.1
 
 - Remove leftover `console.log`.

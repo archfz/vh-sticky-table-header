@@ -99,6 +99,11 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.4.1
+
+- Fix issue with click mirroring not working due to incorrect coordinates.
+- Click mirroring now scrolls higher up (+60px) then only the original table header.
+
 #### 1.4.0
 
 - Improve docking when scrolling past container. Now `offsetTop` is added to the absolute position

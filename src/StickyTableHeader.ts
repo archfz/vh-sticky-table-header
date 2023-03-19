@@ -62,19 +62,18 @@ export default class StickyTableHeader {
       let containerRect = this.tableContainer.getBoundingClientRect();
       let cloneRect = this.cloneContainer.getBoundingClientRect();
       const bodyRect = document.body.getBoundingClientRect();
-      window.scrollTo({ top: containerRect.y - bodyRect.y - this.getTop() });
+      window.scrollTo({ top: containerRect.y - bodyRect.y - this.getTop() - 60 });
 
       setTimeout(() => {
         containerRect = this.tableContainer.getBoundingClientRect();
-        cloneRect = this.cloneContainer.getBoundingClientRect();
         const originalTarget = document.elementFromPoint(
           containerRect.x + (event.clientX - cloneRect.x),
           containerRect.y + (event.clientY - cloneRect.y),
         );
-        if (originalTarget) {
+        if (originalTarget && (originalTarget as HTMLElement).click) {
           (originalTarget as HTMLElement).click();
         }
-      }, 0);
+      }, 50);
     };
     this.cloneContainer.addEventListener('click', this.clickListener);
   }

@@ -55,6 +55,46 @@ const TableWithStickyHeader: FC = ({ children }) => {
 };
 ```
 
+Example usage with Vue 3:
+
+```html
+<script setup>
+import { StickyTableHeader } from 'vh-sticky-table-header';
+import { onMounted, ref, watchEffect } from 'vue';
+
+const tableRef = ref(null);
+const tableCloneRef = ref(null);
+
+onMounted(() => {
+    watchEffect((onCleanup) => {
+        if (!tableRef.value && !tableCloneRef.value) return;
+
+        const stickyTable = new StickyTableHeader(
+            tableRef.value,
+            tableCloneRef.value,
+            { max: 0 },
+        );
+
+        onCleanup(() => stickyTable.destroy();
+    });
+});
+
+</script>
+
+<template>
+  <div class="grid w-full overflow-x-auto overflow-y-hidden md:rounded-lg">
+    <table ref="tableRef">
+      <slot />
+    </table>
+  </div>
+  <div class="grid w-full overflow-x-auto overflow-y-hidden shadow-md md:rounded-lg">
+    <table ref="tableCloneRef" />
+  </div>
+</template>
+
+```
+
+
 Requirements (these can be seen in the demo as well):
 
 1. The table container `div` elements should have the following css for vertical scrolling to work:

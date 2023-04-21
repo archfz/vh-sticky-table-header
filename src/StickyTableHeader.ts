@@ -81,7 +81,7 @@ export default class StickyTableHeader {
   private setupSticky(): void {
     const updateSticky = () => {
       this.currentFrameRequest = window.requestAnimationFrame(() => {
-        const lastElement = this.tableContainer.querySelector('tbody tr:last-child');
+        const lastElement = this.tableContainer.querySelector(':scope > tbody > tr:last-child');
         const bodyRectY = document.body.getBoundingClientRect().y;
         const tableRect = this.tableContainer.getBoundingClientRect();
         const tableOffsetTop = this.tableContainer.offsetTop;

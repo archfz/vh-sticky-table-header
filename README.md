@@ -139,6 +139,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.4.2
+
+- Fix table header sticking at the bottom of last row of an inner table.
+
 #### 1.4.1
 
 - Fix issue with click mirroring not working due to incorrect coordinates.

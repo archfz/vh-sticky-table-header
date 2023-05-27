@@ -140,6 +140,8 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.5.0
+
 - Added support for [multiple scrollable containers](./test/test_multiple_scroll.html). [issue](https://github.com/archfz/vh-sticky-table-header/issues/7)
 - Small performance improvements.
 

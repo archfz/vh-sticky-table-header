@@ -8,13 +8,14 @@ horizontal scroll and stickiness is needed as well.
 ## Features
 
 - Support vertical and horizontal scroll stickiness at the same time.
+- Support for multiple nested scrollable containers.
 - [Support different top displacement per viewport width](#top).
 - No flickering. Element coordinates are not updated on scroll events.
 - [Smaller than 4kb compressed](https://bundlephobia.com/package/vh-sticky-table-header).
 - No dependencies. Can be used in any framework.
 
 ## Installation and usage
-
+    
 ```bash
 npm i --save vh-sticky-table-header
 ```
@@ -138,6 +139,9 @@ Any other key, defined in number, will represent a different number of pixels or
 when the viewport width is less than the key.
 
 ## Release notes
+
+- Added support for [multiple scrollable containers](./test/test_multiple_scroll.html). [issue](https://github.com/archfz/vh-sticky-table-header/issues/7)
+- Small performance improvements.
 
 #### 1.4.2
 

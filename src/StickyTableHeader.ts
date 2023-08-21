@@ -180,9 +180,12 @@ export default class StickyTableHeader {
     this.cloneContainer.append(clone);
 
     const headerSize = this.header.getBoundingClientRect().width;
-    Array.from(this.header.children[0].children).forEach((cell, index) => {
-      (clone.children[0].children[index] as HTMLTableCellElement).style.width =
-        (cell.getBoundingClientRect().width / headerSize) * 100 + '%';
+
+    Array.from(this.header.children).forEach((row, rowIndex) => {
+      Array.from(row.children).forEach((cell, index) => {
+          (clone.children[rowIndex].children[index] as HTMLTableCellElement).style.width =
+            (cell.getBoundingClientRect().width / headerSize) * 100 + '%';
+      });
     });
 
     this.cloneContainer.style.display = 'table';

@@ -140,6 +140,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.6.0
+
+- Added support for multiple table header rows. [merge-request](https://github.com/archfz/vh-sticky-table-header/pull/8) by [ZEA-repository](https://github.com/ZEA-repository)
+
 #### 1.5.0
 
 - Added support for [multiple scrollable containers](./test/test_multiple_scroll.html). [issue](https://github.com/archfz/vh-sticky-table-header/issues/7)

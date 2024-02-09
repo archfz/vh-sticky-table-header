@@ -9,6 +9,7 @@ horizontal scroll and stickiness is needed as well.
 
 - Support vertical and horizontal scroll stickiness at the same time.
 - Support for multiple nested scrollable containers.
+- Support for actions inside the header.
 - [Support different top displacement per viewport width](#top).
 - No flickering. Element coordinates are not updated on scroll events.
 - [Smaller than 4kb compressed](https://bundlephobia.com/package/vh-sticky-table-header).

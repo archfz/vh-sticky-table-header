@@ -141,6 +141,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.7.0
+
+- Reworked header click replication method. Now when clicking table is not scrolled up. [issue](https://github.com/archfz/vh-sticky-table-header/issues/6)
+
 #### 1.6.0
 
 - Added support for multiple table header rows. [merge-request](https://github.com/archfz/vh-sticky-table-header/pull/8) by [ZEA-repository](https://github.com/ZEA-repository)

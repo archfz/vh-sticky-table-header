@@ -139,6 +139,10 @@ Object describing the displacement from top of the viewport for the vertical scr
 Any other key, defined in number, will represent a different number of pixels or `rem` from top to which to stick,
 when the viewport width is less than the key.
 
+#### `scrollContainer`
+
+Reference to the app's scroll element, if not window.
+
 ## Release notes
 
 #### 1.7.0

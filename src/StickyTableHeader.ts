@@ -54,6 +54,13 @@ export default class StickyTableHeader {
     return parents;
   }
 
+  private setup(): void {
+    this.setupSticky();
+    this.setupSizeMirroring();
+    this.setupClickEventMirroring();
+    this.setupHorizontalScrollMirroring();
+  }
+
   public destroy(): void {
     if (this.scrollListener) {
       window.removeEventListener('scroll', this.scrollListener);
@@ -78,23 +85,69 @@ export default class StickyTableHeader {
     }
   }
 
+  private getScrollParent(node: Element | Window): Element | Window {
+    const target = (node as any).parentNode as HTMLElement;
+
+    if (!target) {
+      return document.scrollingElement || document.body;
+    }
+
+    const isElement = target instanceof HTMLElement;
+    const overflowY = (isElement && window.getComputedStyle(target).overflowY) || '';
+    const isScrollable = !(overflowY.includes('hidden') || overflowY.includes('visible'));
+
+    if (isScrollable && target.scrollHeight > target.clientHeight) {
+      return target;
+    }
+
+    return this.getScrollParent(target);
+  }
+
+  private getAllScrollParents(): (Element | Window)[] {
+    const scrollParents: (Element | Window)[] = [this.getScrollParent(this.tableContainer)];
+    while (
+      scrollParents[scrollParents.length-1] !== document.scrollingElement
+      && scrollParents[scrollParents.length-1] !== document.body
+      ) {
+      scrollParents.push(this.getScrollParent(scrollParents[scrollParents.length - 1]));
+    }
+    return scrollParents;
+  }
+
   private setupClickEventMirroring(): void {
     this.clickListener = (event: MouseEvent) => {
-      let containerRect = this.tableContainer.getBoundingClientRect();
-      let cloneRect = this.cloneContainer.getBoundingClientRect();
-      const bodyRect = document.body.getBoundingClientRect();
-      const currentScroll = window.scrollY;
-      window.scrollTo({ top: containerRect.y - bodyRect.y - this.getTop() - 60 });
+      const cloneRect = this.cloneHeader.getBoundingClientRect();
+      const distX = (event.clientX - cloneRect.x);
+      const distY = (event.clientY - cloneRect.y);
 
-      containerRect = this.tableContainer.getBoundingClientRect();
-      const originalTarget = document.elementFromPoint(
-        containerRect.x + (event.clientX - cloneRect.x),
-        containerRect.y + (event.clientY - cloneRect.y),
-      );
-      if (originalTarget && (originalTarget as HTMLElement).click) {
-        (originalTarget as HTMLElement).click();
+      const scrollParents = this.getAllScrollParents();
+      scrollParents.forEach(p => (p as any)._save_scroll = 'scrollY' in p ? p.scrollY : p.scrollTop);
+
+      this.header.style.scrollMarginTop = `${this.getTop() + 3}px`;
+      this.header.scrollIntoView({behavior: "instant" as any, block: "start"});
+
+      let headerRect = this.header.getBoundingClientRect();
+
+      const hiddenTargets: HTMLElement[] = [];
+      let target: Element | null;
+
+      do {
+        target = document.elementFromPoint(headerRect.x + distX, headerRect.y + distY);
+
+        if (target && !this.header.contains(target)) {
+          // @TODO: Switch this solution to scroll-margin-top one as that is less intrusive.
+          // Possible to switch once chrome issue is fixed: https://issues.chromium.org/issues/40074749
+          (target as HTMLElement).style.visibility = 'collapse';
+          hiddenTargets.push(target as HTMLElement);
+        }
+      } while (target && !this.header.contains(target) && hiddenTargets.length < 10)
+
+      if (target && (target as any).click) {
+        (target as HTMLElement).click();
       }
-      window.scrollTo({top: currentScroll});
+
+      hiddenTargets.forEach(t => t.style.removeProperty("visibility"));
+      scrollParents.forEach(p => p.scrollTo({behavior: "instant" as any, top: (p as any)._save_scroll}));
     };
     this.cloneContainer.addEventListener('click', this.clickListener);
   }
@@ -145,13 +198,6 @@ export default class StickyTableHeader {
     this.scrollParents.forEach((parent) => {
       parent.addEventListener('scroll', this.scrollListener!);
     });
-  }
-
-  private setup(): void {
-    this.setupSticky();
-    this.setupSizeMirroring();
-    this.setupClickEventMirroring();
-    this.setupHorizontalScrollMirroring();
   }
 
   private setupSizeMirroring(): void {

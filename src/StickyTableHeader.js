@@ -39,6 +39,12 @@ var StickyTableHeader = /** @class */ (function () {
         }
         return parents;
     };
+    StickyTableHeader.prototype.setup = function () {
+        this.setupSticky();
+        this.setupSizeMirroring();
+        this.setupClickEventMirroring();
+        this.setupHorizontalScrollMirroring();
+    };
     StickyTableHeader.prototype.destroy = function () {
         var _this = this;
         if (this.scrollListener) {
@@ -63,23 +69,50 @@ var StickyTableHeader = /** @class */ (function () {
             this.cloneContainer.removeChild(this.cloneHeader);
         }
     };
+    StickyTableHeader.prototype.getScrollParent = function (node) {
+        var target = node.parentNode;
+        if (!target) {
+            return document.scrollingElement || document.body;
+        }
+        var isElement = target instanceof HTMLElement;
+        var overflowY = (isElement && window.getComputedStyle(target).overflowY) || '';
+        var isScrollable = !(overflowY.includes('hidden') || overflowY.includes('visible'));
+        if (isScrollable && target.scrollHeight > target.clientHeight) {
+            return target;
+        }
+        return this.getScrollParent(target);
+    };
+    StickyTableHeader.prototype.getAllScrollParents = function () {
+        var scrollParents = [this.getScrollParent(this.tableContainer)];
+        while (scrollParents[scrollParents.length - 1] !== document.scrollingElement
+            && scrollParents[scrollParents.length - 1] !== document.body) {
+            scrollParents.push(this.getScrollParent(scrollParents[scrollParents.length - 1]));
+        }
+        return scrollParents;
+    };
     StickyTableHeader.prototype.setupClickEventMirroring = function () {
         var _this = this;
         this.clickListener = function (event) {
-            var containerRect = _this.tableContainer.getBoundingClientRect();
-            var cloneRect = _this.cloneContainer.getBoundingClientRect();
-            var bodyRect = document.body.getBoundingClientRect();
-            var currentScroll = document.body.scrollTop;
-            console.log(currentScroll);
-            window.scrollTo({ top: containerRect.y - bodyRect.y - _this.getTop() - 60 });
-            setTimeout(function () {
-                containerRect = _this.tableContainer.getBoundingClientRect();
-                var originalTarget = document.elementFromPoint(containerRect.x + (event.clientX - cloneRect.x), containerRect.y + (event.clientY - cloneRect.y));
-                if (originalTarget && originalTarget.click) {
-                    originalTarget.click();
-                }
-                window.scrollTo({ top: currentScroll });
-            }, 50);
+            var cloneRect = _this.cloneHeader.getBoundingClientRect();
+            var distX = (event.clientX - cloneRect.x);
+            var distY = (event.clientY - cloneRect.y);
+            console.log(distY, distX);
+            var scrollParents = _this.getAllScrollParents();
+            scrollParents.forEach(function (p) { return p._save_scroll = 'scrollY' in p ? p.scrollY : p.scrollTop; });
+            _this.tableContainer.style.scrollMarginTop = "".concat(_this.getTop() + 3, "px");
+            _this.tableContainer.scrollIntoView({ behavior: "instant", block: "start" });
+            var headerRect = _this.header.getBoundingClientRect();
+            var originalTarget = document.elementFromPoint(headerRect.x + distX, headerRect.y + distY);
+            var elmenet = document.body.querySelector('.red');
+            if (elmenet && distY > 0) {
+                elmenet.style.left = "".concat(headerRect.x + distX, "px");
+                elmenet.style.top = "".concat(headerRect.y + distY, "px");
+            }
+            if (originalTarget && originalTarget.click) {
+                console.log(originalTarget);
+                originalTarget.click();
+            }
+            // scrollParents.forEach(p => p.scrollTo({behavior: "instant" as any, top: (p as any)._save_scroll}));
         };
         this.cloneContainer.addEventListener('click', this.clickListener);
     };
@@ -127,12 +160,6 @@ var StickyTableHeader = /** @class */ (function () {
         this.scrollParents.forEach(function (parent) {
             parent.addEventListener('scroll', _this.scrollListener);
         });
-    };
-    StickyTableHeader.prototype.setup = function () {
-        this.setupSticky();
-        this.setupSizeMirroring();
-        this.setupClickEventMirroring();
-        this.setupHorizontalScrollMirroring();
     };
     StickyTableHeader.prototype.setupSizeMirroring = function () {
         var _this = this;

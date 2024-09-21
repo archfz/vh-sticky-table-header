@@ -141,6 +141,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.8.1
+
+- Reduce package size.
+
 #### 1.8.0
 
 - Support header click replication method when table in multiple scroll containers. [issue](https://github.com/archfz/vh-sticky-table-header/issues/10)

@@ -1,6 +1,6 @@
 {
   "name": "vh-sticky-table-header",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Vertical and horizontal sticky table header. Framework agnostic. ",
   "main": "build/commonjs/index.js",
   "module": "build/esm/index.js",
@@ -12,7 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --outDir build/esm --declaration --declarationDir build && tsc --outDir build/commonjs --module commonjs && echo '{\"type\":\"module\"}' > build/esm/package.json && echo '{\"type\":\"commonjs\"}' > build/commonjs/package.json",
-    "release": "npm run build && npm publish"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

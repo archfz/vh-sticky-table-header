@@ -296,7 +296,7 @@ export default class StickyTableHeader {
 
   private getLastElement() {
     if (!this.lastElement) {
-      this.lastElement = this.tableContainer.querySelector(':scope > tbody > tr:last-child');
+      this.lastElement = this.tableContainer.querySelector(':scope > tbody:last-of-type > tr:last-child');
       return this.lastElement;
     }
 

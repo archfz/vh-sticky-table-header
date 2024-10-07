@@ -251,7 +251,7 @@ var StickyTableHeader = /** @class */ (function () {
     StickyTableHeader.prototype.getLastElement = function () {
         var _this = this;
         if (!this.lastElement) {
-            this.lastElement = this.tableContainer.querySelector(':scope > tbody > tr:last-child');
+            this.lastElement = this.tableContainer.querySelector(':scope > tbody:last-of-type > tr:last-child');
             return this.lastElement;
         }
         if (this.lastElementRefresh) {

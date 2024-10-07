@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --outDir build/esm --declaration --declarationDir build && tsc --outDir build/commonjs --module commonjs && echo '{\"type\":\"module\"}' > build/esm/package.json && echo '{\"type\":\"commonjs\"}' > build/commonjs/package.json",
+    "build": "tsc --outDir build/esm --declaration --declarationDir build && tsc --outDir build/commonjs --module commonjs && echo {\"type\":\"module\"} > build/esm/package.json && echo {\"type\":\"commonjs\"} > build/commonjs/package.json",
     "prepublish": "npm run build"
   },
   "repository": {

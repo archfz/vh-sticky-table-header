@@ -141,6 +141,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.8.2
+
+- Fix header bottom docking in case of multiple `tbody` tags. [merge-request](https://github.com/archfz/vh-sticky-table-header/pull/12) by [geic99](https://github.com/geic99)
+
 #### 1.8.1
 
 - Reduce package size.

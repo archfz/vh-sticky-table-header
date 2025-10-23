@@ -21,23 +21,19 @@ export default class StickyTableHeader {
   constructor(
     tableContainer: HTMLTableElement,
     cloneContainer: HTMLTableElement,
-    top?: { max: number | string; [key: number]: number | string }
+    top?: { max: number | string; [key: number]: number | string },
   ) {
-    const header = tableContainer.querySelector<HTMLTableRowElement>("thead");
+    const header = tableContainer.querySelector<HTMLTableRowElement>('thead');
     this.tableContainer = tableContainer;
     this.cloneContainer = cloneContainer;
-    this.top = top || { max: 0 };
+    this.top = top || {max: 0};
 
     if (!header || !this.tableContainer.parentNode) {
-      throw new Error(
-        "Header or parent node of sticky header table container not found!"
-      );
+      throw new Error('Header or parent node of sticky header table container not found!');
     }
 
-    this.tableContainerParent = this.tableContainer
-      .parentNode as HTMLDivElement;
-    this.cloneContainerParent = this.cloneContainer
-      .parentNode as HTMLDivElement;
+    this.tableContainerParent = this.tableContainer.parentNode as HTMLDivElement;
+    this.cloneContainerParent = this.cloneContainer.parentNode as HTMLDivElement;
     this.header = header;
     this.scrollParents = this.getScrollParents(this.tableContainer);
 
@@ -67,25 +63,22 @@ export default class StickyTableHeader {
 
   public destroy(): void {
     if (this.scrollListener) {
-      window.removeEventListener("scroll", this.scrollListener);
+      window.removeEventListener('scroll', this.scrollListener);
       this.scrollParents.forEach((parent) => {
-        parent.removeEventListener("scroll", this.scrollListener!);
+        parent.removeEventListener('scroll', this.scrollListener!);
       });
     }
     if (this.currentFrameRequest) {
       window.cancelAnimationFrame(this.currentFrameRequest);
     }
     if (this.sizeListener) {
-      window.removeEventListener("resize", this.sizeListener);
+      window.removeEventListener('resize', this.sizeListener);
     }
     if (this.containerScrollListener) {
-      this.tableContainerParent.removeEventListener(
-        "click",
-        this.containerScrollListener
-      );
+      this.tableContainerParent.removeEventListener('click', this.containerScrollListener);
     }
     if (this.clickListener) {
-      this.cloneContainer.removeEventListener("click", this.clickListener);
+      this.cloneContainer.removeEventListener('click', this.clickListener);
     }
     if (this.cloneHeader) {
       this.cloneContainer.removeChild(this.cloneHeader);
@@ -100,11 +93,8 @@ export default class StickyTableHeader {
     }
 
     const isElement = target instanceof HTMLElement;
-    const overflowY =
-      (isElement && window.getComputedStyle(target).overflowY) || "";
-    const isScrollable = !(
-      overflowY.includes("hidden") || overflowY.includes("visible")
-    );
+    const overflowY = (isElement && window.getComputedStyle(target).overflowY) || '';
+    const isScrollable = !(overflowY.includes('hidden') || overflowY.includes('visible'));
 
     if (isScrollable && target.scrollHeight > target.clientHeight) {
       return target;
@@ -114,16 +104,12 @@ export default class StickyTableHeader {
   }
 
   private getAllScrollParents(): (Element | Window)[] {
-    const scrollParents: (Element | Window)[] = [
-      this.getScrollParent(this.tableContainer),
-    ];
+    const scrollParents: (Element | Window)[] = [this.getScrollParent(this.tableContainer)];
     while (
-      scrollParents[scrollParents.length - 1] !== document.scrollingElement &&
-      scrollParents[scrollParents.length - 1] !== document.body
-    ) {
-      scrollParents.push(
-        this.getScrollParent(scrollParents[scrollParents.length - 1])
-      );
+      scrollParents[scrollParents.length-1] !== document.scrollingElement
+      && scrollParents[scrollParents.length-1] !== document.body
+      ) {
+      scrollParents.push(this.getScrollParent(scrollParents[scrollParents.length - 1]));
     }
     return scrollParents;
   }
@@ -131,20 +117,14 @@ export default class StickyTableHeader {
   private setupClickEventMirroring(): void {
     this.clickListener = (event: MouseEvent) => {
       const cloneRect = this.cloneHeader.getBoundingClientRect();
-      const distX = event.clientX - cloneRect.x;
-      const distY = event.clientY - cloneRect.y;
+      const distX = (event.clientX - cloneRect.x);
+      const distY = (event.clientY - cloneRect.y);
 
       const scrollParents = this.getAllScrollParents();
-      scrollParents.forEach(
-        (p) =>
-          ((p as any)._save_scroll = "scrollY" in p ? p.scrollY : p.scrollTop)
-      );
+      scrollParents.forEach(p => (p as any)._save_scroll = 'scrollY' in p ? p.scrollY : p.scrollTop);
 
       this.header.style.scrollMarginTop = `${this.getTop() + 3}px`;
-      this.header.scrollIntoView({
-        behavior: "instant" as any,
-        block: "start",
-      });
+      this.header.scrollIntoView({behavior: "instant" as any, block: "start"});
 
       let headerRect = this.header.getBoundingClientRect();
 
@@ -152,44 +132,29 @@ export default class StickyTableHeader {
       let target: Element | null;
 
       do {
-        target = document.elementFromPoint(
-          headerRect.x + distX,
-          headerRect.y + distY
-        );
+        target = document.elementFromPoint(headerRect.x + distX, headerRect.y + distY);
 
         if (target && !this.header.contains(target)) {
           // @TODO: Switch this solution to scroll-margin-top one as that is less intrusive.
           // Possible to switch once chrome issue is fixed: https://issues.chromium.org/issues/40074749
-          (target as HTMLElement).style.visibility = "collapse";
+          (target as HTMLElement).style.visibility = 'collapse';
           hiddenTargets.push(target as HTMLElement);
         }
-      } while (
-        target &&
-        !this.header.contains(target) &&
-        hiddenTargets.length < 10
-      );
+      } while (target && !this.header.contains(target) && hiddenTargets.length < 10)
 
-      if (target) {
-        const clickEvent = new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-        });
-        target.dispatchEvent(clickEvent);
+      if (target && (target as any).click) {
+        (target as HTMLElement).click();
       }
 
-      hiddenTargets.forEach((t) => t.style.removeProperty("visibility"));
-      scrollParents.forEach((p) =>
-        p.scrollTo({ behavior: "instant" as any, top: (p as any)._save_scroll })
-      );
+      hiddenTargets.forEach(t => t.style.removeProperty("visibility"));
+      scrollParents.forEach(p => p.scrollTo({behavior: "instant" as any, top: (p as any)._save_scroll}));
     };
-    this.cloneContainer.addEventListener("click", this.clickListener);
+    this.cloneContainer.addEventListener('click', this.clickListener);
   }
 
   private setupSticky(): void {
     if (this.cloneContainerParent.parentNode) {
-      (this.cloneContainerParent.parentNode as HTMLElement).style.position =
-        "relative";
+      (this.cloneContainerParent.parentNode as HTMLElement).style.position = 'relative';
     }
 
     const updateSticky = () => {
@@ -199,31 +164,29 @@ export default class StickyTableHeader {
         const tableTop = tableRect.y;
         const tableBottom = this.getBottom();
 
-        const diffTop = -tableTop;
-        const diffBottom = -tableBottom;
+        const diffTop = - tableTop;
+        const diffBottom = - tableBottom;
         const topPx = this.getTop();
 
         if (diffTop > -topPx && this.cloneHeader === null) {
-          this.cloneContainerParent.style.display = "none";
+          this.cloneContainerParent.style.display = 'none';
           this.cloneHeader = this.createClone();
         }
 
         if (this.cloneHeader !== null) {
           if (diffTop <= -topPx) {
-            this.cloneContainerParent.style.display = "none";
+            this.cloneContainerParent.style.display = 'none';
             this.cloneContainer.removeChild(this.cloneHeader);
             this.cloneHeader = null;
           } else if (diffBottom < -topPx) {
-            this.cloneContainerParent.style.display = "block";
-            this.cloneContainerParent.style.position = "fixed";
+            this.cloneContainerParent.style.display = 'block';
+            this.cloneContainerParent.style.position = 'fixed';
             this.cloneContainerParent.style.top = `${topPx}px`;
             this.setHorizontalScrollOnClone();
           } else {
-            this.cloneContainerParent.style.display = "block";
-            this.cloneContainerParent.style.position = "absolute";
-            this.cloneContainerParent.style.top = `${
-              tableBottom - tableTop + tableOffsetTop
-            }px`;
+            this.cloneContainerParent.style.display = 'block';
+            this.cloneContainerParent.style.position = 'absolute';
+            this.cloneContainerParent.style.top = `${tableBottom - tableTop + tableOffsetTop}px`;
           }
         }
       });
@@ -231,9 +194,9 @@ export default class StickyTableHeader {
     this.scrollListener = () => updateSticky();
     updateSticky();
 
-    window.addEventListener("scroll", this.scrollListener);
+    window.addEventListener('scroll', this.scrollListener);
     this.scrollParents.forEach((parent) => {
-      parent.addEventListener("scroll", this.scrollListener!);
+      parent.addEventListener('scroll', this.scrollListener!);
     });
   }
 
@@ -246,7 +209,7 @@ export default class StickyTableHeader {
         this.setHorizontalScrollOnClone();
       });
     };
-    window.addEventListener("resize", this.sizeListener);
+    window.addEventListener('resize', this.sizeListener);
   }
 
   private setupHorizontalScrollMirroring(): void {
@@ -255,10 +218,7 @@ export default class StickyTableHeader {
         this.setHorizontalScrollOnClone();
       });
     };
-    this.tableContainerParent.addEventListener(
-      "scroll",
-      this.containerScrollListener
-    );
+    this.tableContainerParent.addEventListener('scroll', this.containerScrollListener);
   }
 
   private createClone(): HTMLTableRowElement {
@@ -269,18 +229,16 @@ export default class StickyTableHeader {
 
     Array.from(this.header.children).forEach((row, rowIndex) => {
       Array.from(row.children).forEach((cell, index) => {
-        (
-          clone.children[rowIndex].children[index] as HTMLTableCellElement
-        ).style.width =
-          (cell.getBoundingClientRect().width / headerSize) * 100 + "%";
+          (clone.children[rowIndex].children[index] as HTMLTableCellElement).style.width =
+            (cell.getBoundingClientRect().width / headerSize) * 100 + '%';
       });
     });
 
-    this.cloneContainer.style.display = "table";
+    this.cloneContainer.style.display = 'table';
     this.cloneContainer.style.width = `${headerSize}px`;
 
-    this.cloneContainerParent.style.position = "fixed";
-    this.cloneContainerParent.style.overflow = "hidden";
+    this.cloneContainerParent.style.position = 'fixed';
+    this.cloneContainerParent.style.overflow = 'hidden';
     this.cloneContainerParent.style.top = `${this.getTop()}px`;
 
     this.setHorizontalScrollOnClone();
@@ -289,27 +247,20 @@ export default class StickyTableHeader {
   }
 
   private setHorizontalScrollOnClone(): void {
-    this.cloneContainerParent.style.width = `${
-      this.tableContainerParent.getBoundingClientRect().width
-    }px`;
+    this.cloneContainerParent.style.width = `${this.tableContainerParent.getBoundingClientRect().width}px`;
     this.cloneContainerParent.scrollLeft = this.tableContainerParent.scrollLeft;
   }
 
   private sizeToPx(size: number | string): number {
-    if (typeof size === "number") {
+    if (typeof size === 'number') {
       return size;
     } else if (size.match(/rem$/)) {
-      const rem = +size.replace(/rem$/, "");
-      return (
-        Number.parseFloat(
-          window.getComputedStyle(document.getElementsByTagName("html")[0])
-            .fontSize
-        ) * rem
-      );
+      const rem = +size.replace(/rem$/, '');
+      return Number.parseFloat(
+        window.getComputedStyle(document.getElementsByTagName('html')[0]).fontSize
+      ) * rem;
     } else {
-      console.error(
-        "Unsupported size format for sticky table header displacement."
-      );
+      console.error('Unsupported size format for sticky table header displacement.');
       return 0;
     }
   }
@@ -317,11 +268,8 @@ export default class StickyTableHeader {
   private getTop(): number {
     const windowWidth = document.body.getBoundingClientRect().width;
     const sizes = Object.entries(this.top)
-      .filter(([key]) => key !== "max")
-      .sort(
-        ([key1], [key2]) =>
-          Number.parseInt(key1, 10) - Number.parseInt(key2, 10)
-      );
+      .filter(([key]) => key !== 'max')
+      .sort(([key1], [key2]) => Number.parseInt(key1, 10) - Number.parseInt(key2, 10));
 
     for (let i = 0, size; (size = sizes[i++]); ) {
       if (windowWidth < Number.parseInt(size[0], 10)) {
@@ -330,9 +278,7 @@ export default class StickyTableHeader {
     }
 
     const top = this.sizeToPx(this.top.max);
-    const parentTops = this.scrollParents.map(
-      (c) => c.getBoundingClientRect().top
-    );
+    const parentTops = this.scrollParents.map((c) => c.getBoundingClientRect().top)
 
     return Math.max(top, ...parentTops);
   }
@@ -342,21 +288,15 @@ export default class StickyTableHeader {
     const lastElement = this.getLastElement();
     const headerHeight = this.header.getBoundingClientRect().height;
 
-    const defaultBottom =
-      (lastElement
-        ? lastElement.getBoundingClientRect().y
-        : tableRect.y + tableRect.height) - headerHeight;
-    const parentBottoms = this.scrollParents.map(
-      (c) => c.getBoundingClientRect().bottom - 2 * headerHeight
-    );
+    const defaultBottom = (lastElement ? lastElement.getBoundingClientRect().y : tableRect.y + tableRect.height) - headerHeight;
+    const parentBottoms = this.scrollParents.map((c) =>
+      c.getBoundingClientRect().bottom - 2 * headerHeight)
     return Math.min(defaultBottom, ...parentBottoms, Number.MAX_VALUE);
   }
 
   private getLastElement() {
     if (!this.lastElement) {
-      this.lastElement = this.tableContainer.querySelector(
-        ":scope > tbody:last-of-type > tr:last-child"
-      );
+      this.lastElement = this.tableContainer.querySelector(':scope > tbody:last-of-type > tr:last-child');
       return this.lastElement;
     }
 

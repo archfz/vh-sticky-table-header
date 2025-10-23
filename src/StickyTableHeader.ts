@@ -142,8 +142,13 @@ export default class StickyTableHeader {
         }
       } while (target && !this.header.contains(target) && hiddenTargets.length < 10)
 
-      if (target && (target as any).click) {
-        (target as HTMLElement).click();
+      if (target) {
+        const clickEvent = new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        });
+        target.dispatchEvent(clickEvent);
       }
 
       hiddenTargets.forEach(t => t.style.removeProperty("visibility"));

@@ -7,7 +7,6 @@ export default class StickyTableHeader {
   private currentFrameRequest?: number;
   private containerScrollListener?: EventListener;
   private clickListener?: (event: MouseEvent) => any;
-  private tableContainerParent: HTMLDivElement;
   private tableContainer: HTMLTableElement;
   private cloneContainer: HTMLTableElement;
   private cloneContainerParent: HTMLDivElement;
@@ -17,11 +16,13 @@ export default class StickyTableHeader {
   private lastElement: HTMLElement | null = null;
   private lastElementRefresh: number | null = null;
   private top: { max: number | string; [key: number]: number | string };
+  private scrollContainer: HTMLDivElement;
 
   constructor(
     tableContainer: HTMLTableElement,
     cloneContainer: HTMLTableElement,
     top?: { max: number | string; [key: number]: number | string },
+    scrollContainer?: HTMLDivElement
   ) {
     const header = tableContainer.querySelector<HTMLTableRowElement>('thead');
     this.tableContainer = tableContainer;
@@ -32,7 +33,8 @@ export default class StickyTableHeader {
       throw new Error('Header or parent node of sticky header table container not found!');
     }
 
-    this.tableContainerParent = this.tableContainer.parentNode as HTMLDivElement;
+    this.scrollContainer = scrollContainer || this.tableContainer.parentNode as HTMLDivElement;
+
     this.cloneContainerParent = this.cloneContainer.parentNode as HTMLDivElement;
     this.header = header;
     this.scrollParents = this.getScrollParents(this.tableContainer);
@@ -75,7 +77,7 @@ export default class StickyTableHeader {
       window.removeEventListener('resize', this.sizeListener);
     }
     if (this.containerScrollListener) {
-      this.tableContainerParent.removeEventListener('click', this.containerScrollListener);
+      this.scrollContainer.removeEventListener('click', this.containerScrollListener);
     }
     if (this.clickListener) {
       this.cloneContainer.removeEventListener('click', this.clickListener);
@@ -223,7 +225,7 @@ export default class StickyTableHeader {
         this.setHorizontalScrollOnClone();
       });
     };
-    this.tableContainerParent.addEventListener('scroll', this.containerScrollListener);
+    this.scrollContainer.addEventListener('scroll', this.containerScrollListener);
   }
 
   private createClone(): HTMLTableRowElement {
@@ -252,8 +254,8 @@ export default class StickyTableHeader {
   }
 
   private setHorizontalScrollOnClone(): void {
-    this.cloneContainerParent.style.width = `${this.tableContainerParent.getBoundingClientRect().width}px`;
-    this.cloneContainerParent.scrollLeft = this.tableContainerParent.scrollLeft;
+    this.cloneContainerParent.style.width = `${this.scrollContainer.getBoundingClientRect().width}px`;
+    this.cloneContainerParent.scrollLeft = this.scrollContainer.scrollLeft;
   }
 
   private sizeToPx(size: number | string): number {

@@ -117,10 +117,15 @@ Options are provided to the constructor of the sticky table header instance.
 
 ```typescript
 export default class StickyTableHeader {
-  constructor(tableContainer: HTMLDivElement, cloneContainer: HTMLTableElement, top: {
-    max: number | string;
-    [key: number]: number | string;
-  });
+  constructor(
+    tableContainer: HTMLDivElement,
+    cloneContainer: HTMLTableElement,
+    top: {
+      max: number | string;
+      [key: number]: number | string;
+    },
+    scrollContainer: HTMLDivElement
+  )
 }
 ```
 
@@ -138,6 +143,11 @@ Object describing the displacement from top of the viewport for the vertical scr
 `max` is the default number of pixels or `rem` from top.
 Any other key, defined in number, will represent a different number of pixels or `rem` from top to which to stick,
 when the viewport width is less than the key.
+
+#### `scrollContainer`
+
+Object describing the scrolling element of the viewport for the vertical or horizontal scrolling. If not provided, the scrolling element is the parent element of tableContainer
+
 
 ## Release notes
 

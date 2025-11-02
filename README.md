@@ -117,10 +117,14 @@ Options are provided to the constructor of the sticky table header instance.
 
 ```typescript
 export default class StickyTableHeader {
-  constructor(tableContainer: HTMLDivElement, cloneContainer: HTMLTableElement, top: {
-    max: number | string;
-    [key: number]: number | string;
-  });
+  constructor(
+    tableContainer: HTMLTableElement,
+    cloneContainer: HTMLTableElement,
+    top: {
+      max: number | string;
+      [key: number]: number | string;
+    }
+  )
 }
 ```
 

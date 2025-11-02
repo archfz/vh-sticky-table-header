@@ -145,6 +145,11 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.9.0
+
+- Automatic horizontal scrolling parent detection. [merge-request](https://github.com/archfz/vh-sticky-table-header/pull/15) by [hmouaad](https://github.com/hmouaad)
+- Support bubbling on click events from the clone header. [merge-request](https://github.com/archfz/vh-sticky-table-header/pull/14) by [geic99](https://github.com/geic99)
+
 #### 1.8.2
 
 - Fix header bottom docking in case of multiple `tbody` tags. [merge-request](https://github.com/archfz/vh-sticky-table-header/pull/12) by [geic99](https://github.com/geic99)

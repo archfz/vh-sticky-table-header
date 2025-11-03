@@ -145,6 +145,10 @@ when the viewport width is less than the key.
 
 ## Release notes
 
+#### 1.9.1
+
+- Fix incorrect build with module type. [issue](https://github.com/archfz/vh-sticky-table-header/issues/16)
+
 #### 1.9.0
 
 - Automatic horizontal scrolling parent detection. [merge-request](https://github.com/archfz/vh-sticky-table-header/pull/15) by [hmouaad](https://github.com/hmouaad)

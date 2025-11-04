@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": [],
     "target": "es5",
     "sourceMap": true,
     "noUnusedLocals": true,
